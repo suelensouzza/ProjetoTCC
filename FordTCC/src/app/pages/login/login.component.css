@@ -1,0 +1,157 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.tela-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #2e51ec, #6715d3);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.login-container {
+  display: flex;
+  background: #fff;
+  max-width: 1100px; 
+  width: 80vw;       
+  min-height: 600px; 
+  border-radius: 12px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.lado-esquerdo {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  flex: 1.5;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 60px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-container img {
+  width: 50px;
+  height: 50px;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 42px;
+  color: white;
+}
+
+.destaque {
+  color: #6aadff;
+}
+
+.boas-vindas h1 {
+  font-size: 2.5rem;
+  margin-top: 30px;
+}
+
+.boas-vindas p {
+  margin-top: 20px;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.lado-direito {
+  flex: 1.5;
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.formulario-login h2 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  color: #1e293b;
+}
+
+.subtitulo {
+  color: #64748b;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+}
+
+.campo-form {
+  margin-bottom: 20px;
+}
+
+.campo-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.campo-form input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f9fafb;
+  font-size: 1rem;
+}
+
+.campo-form input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #fff;
+  box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.1);
+}
+
+.opcoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.lembrar input {
+  width: 20px;
+}
+
+.botao-entrar {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(to right, #3b82f6, #1e40af);
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    max-width: 400px;
+  }
+
+  .lado-esquerdo {
+    flex: none;
+    padding: 30px;
+    text-align: center;
+  }
+
+  .lado-direito {
+    padding: 30px;
+  }
+}

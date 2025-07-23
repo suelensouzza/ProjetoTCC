@@ -1,0 +1,251 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: Arial, sans-serif;
+  background-color: #f0f4f8;
+  margin: 0;
+  padding: 0;
+}
+
+.sistema-monitoramento {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.cabecalho {
+  background-color: #004481;
+  color: white;
+  padding: 20px;
+  width: 100%;
+  margin: 0;
+}
+
+.conteudo-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo h1 {
+  font-size: 35px;
+}
+
+.subtitulo {
+  font-size: 0.9rem;
+}
+
+.usuario-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar-usuario {
+  background-color: #007bff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.container-principal {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.menu-lateral {
+  width: 220px; 
+  background-color: #003366;
+  color: white;
+  min-height: 100vh;
+  padding-top: 20px;
+  flex-shrink: 0;
+  margin: 0;
+  border-right: none;
+}
+
+.itens-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-menu {
+  background: none;
+  border: none;
+  color: white;
+  padding: 15px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+  text-decoration: none;
+}
+
+.item-menu:hover,
+.item-menu.ativo {
+  background-color: #0055aa;
+}
+
+.item-menu:last-child {
+  background: none;
+  margin-top: auto;
+}
+
+.item-menu:last-child:hover {
+  background-color: #0055aa;
+}
+
+.item-menu:last-child span {
+  font-weight: bold;
+}
+
+.conteudo-principal {
+  flex-grow: 1;
+  padding: 30px;
+  overflow-x: auto;
+  width: 100%;
+  max-width: 100%;
+  margin-left: 25px; 
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.cabecalho-secao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.grade-estatisticas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.cartao {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.numero-estatistica {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.rotulo-estatistica {
+  margin-top: 10px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.barra-progresso {
+  background-color: #e9ecef;
+  border-radius: 5px;
+  margin-top: 10px;
+  height: 10px;
+  width: 100%;
+}
+
+.progresso {
+  height: 10px;
+  border-radius: 5px;
+}
+
+.secao-atividades {
+  margin-top: 40px;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  table-layout: auto;
+}
+
+.tabela th,
+.tabela td {
+  padding: 14px 16px;
+  border: 1px solid #dee2e6;
+  text-align: left;
+  white-space: normal;
+  font-size: 0.95rem;
+}
+
+.etiqueta-status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.etiqueta-status.excelente {
+  background-color: #28a745;
+}
+
+.etiqueta-status.bom {
+  background-color: #ffc107;
+}
+
+.etiqueta-status.critico {
+  background-color: #dc3545;
+}
+
+.nome-computador {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.indicador-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.botoes-acoes button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.btn-primario {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-primario:hover {
+  background-color: #0056b3;
+}
+
+.vencido {
+  color: red;
+  font-weight: bold;
+}

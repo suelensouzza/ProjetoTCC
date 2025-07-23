@@ -1,0 +1,103 @@
+<header class="cabecalho">
+  <div class="conteudo-cabecalho">
+    <div class="logo">
+      <h1>ControlDesk</h1>
+      <span class="subtitulo">Sistema de Monitoramento de Computadores</span>
+    </div>
+    <div class="usuario-info">
+      <span class="nome-usuario">{{ userName }}</span>
+      <div class="avatar-usuario">{{ userName[0] }}</div>
+    </div>
+  </div>
+</header>
+
+<div class="container-principal">
+  <nav class="menu-lateral">
+    <div class="itens-menu">
+      <a routerLink="" routerLinkActive="ativo" class="item-menu">📊 <span>Painel</span></a>
+      <a href="/computadores" class="item-menu">💻 <span>Computadores</span></a>
+      <a href="/manutencao" class="item-menu">🔧 <span>Manutenção</span></a>
+      <a (click)="logoff()" class="item-menu">🚪 <span>Sair</span></a> <!-- Adicionando o botão de Logoff -->
+    </div>
+  </nav>
+
+
+
+
+  <main class="conteudo-principal">
+    <div id="painel" class="secao">
+      <div class="cabecalho-secao">
+        <h2>Painel</h2>
+      </div>
+
+      <div class="grade-estatisticas">
+        <div class="cartao total">
+          <div class="numero-estatistica">{{ totalComputers }}</div>
+          <div class="rotulo-estatistica">TOTAL DE COMPUTADORES</div>
+          <div class="barra-progresso">
+            <div class="progresso" style="width: 100%; background: #007bff;"></div>
+          </div>
+        </div>
+
+        <div class="cartao excelente">
+          <div class="numero-estatistica">{{ excellentCount }}</div>
+          <div class="rotulo-estatistica">ESTADO EXCELENTE</div>
+          <div class="barra-progresso">
+            <div class="progresso" style="width: 60%; background: #28a745;"></div>
+          </div>
+        </div>
+
+        <div class="cartao critico">
+          <div class="numero-estatistica">{{ criticalCount }}</div>
+          <div class="rotulo-estatistica">ESTADO CRÍTICO</div>
+          <div class="barra-progresso">
+            <div class="progresso" style="width: 30%; background: #dc3545;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="secao-atividades">
+        <div class="titulo-secao">
+          <h3>Em Andamento</h3>
+        </div>
+        <div class="tabela-atividades">
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>COMPUTADOR</th>
+                <th>LOCALIZAÇÃO</th>
+                <th>STATUS</th>
+                <th>ÚLTIMA MANUTENÇÃO</th>
+                <th>PRÓXIMA MANUTENÇÃO</th>
+                <th>AÇÕES</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let c of computers">
+                <td>
+                  <div class="nome-computador">
+                    <span class="indicador-status" [ngStyle]="{'background-color': getStatusColor(c.status)}"></span>
+                    {{ c.nome }}
+                  </div>
+                </td>
+                <td>{{ c.localizacao }}</td>
+                <td>
+                  <span [ngClass]="getStatusClass(c.status)">
+                    {{ c.status.toUpperCase() }}
+                  </span>
+                </td>
+                <td>{{ c.ultimaManutencao }}</td>
+                <td [ngClass]="{ 'vencido': isOverdue(c.proximaManutencao) }">{{ c.proximaManutencao }}</td>
+                <td>
+                  <div class="botoes-acoes">
+                    <button class="botao-acao excluir" title="Excluir" (click)="excluirComputador(c.id)">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

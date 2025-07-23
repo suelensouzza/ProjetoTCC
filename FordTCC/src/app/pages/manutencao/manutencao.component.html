@@ -1,0 +1,125 @@
+<header class="header">
+  <div>
+    <h1>ControlDesk</h1>
+    <small>Sistema de Monitoramento de Computadores</small>
+  </div>
+  <div class="admin-info">
+    <span>Admin</span>
+    <div style="width: 32px; height: 32px; background: #4299e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">A</div>
+  </div>
+</header>
+
+<div class="main-container">
+  <div class="page-header">
+    <div class="icon">⚠️</div>
+    <div class="page-title">
+      <h2>Manutenções Preventivas Críticas</h2>
+      <p>Computadores com manutenção atrasada há mais de 4 meses</p>
+    </div>
+  </div>
+
+  <div class="alert-banner" *ngIf="computadoresCriticos.length > 0">
+    <span class="alert-icon">🚨</span>
+    <div>
+      <strong>Atenção!</strong> Existem equipamentos com manutenção preventiva severamente atrasada. Ação imediata necessária.
+    </div>
+  </div>
+
+  <div class="stats-container">
+    <div class="stat-card stat-critical">
+      <div class="stat-number">{{ computadoresCriticos.length }}</div>
+      <div class="stat-label">Equipamentos Críticos<br>(+4 meses atraso)</div>
+    </div>
+    <div class="stat-card stat-overdue">
+      <div class="stat-number">{{ atrasoMedio }} meses</div>
+      <div class="stat-label">Atraso Médio<br>(em meses)</div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label>Buscar Computador</label>
+      <input type="text" class="filter-input" placeholder="Digite o nome ou ID..." [(ngModel)]="termoBusca" (input)="filtrar()">
+    </div>
+    <div class="filter-group">
+      <label>Localização</label>
+      <select class="filter-select" [(ngModel)]="filtroLocalizacao" (change)="filtrar()">
+        <option value="">Todas as Localizações</option>
+        <option *ngFor="let loc of localizacoesUnicas" [value]="loc">{{ loc }}</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Atraso Mínimo</label>
+      <select class="filter-select" [(ngModel)]="filtroAtrasoMinimo" (change)="filtrar()">
+        <option value="4">4+ meses</option>
+        <option value="6">6+ meses</option>
+        <option value="12">1+ ano</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Localização</th>
+          <th>Última Manutenção</th>
+          <th>Atraso</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of computadoresFiltrados">
+          <td>{{ c.id }}</td>
+          <td>{{ c.nome }}</td>
+          <td>{{ c.localizacao }}</td>
+          <td>{{ c.ultimaManutencao }}</td>
+          <td>{{ calcularMesesDesdeUltimaManutencao(c.ultimaManutencao) }} meses</td>
+          <td>
+            <span [ngClass]="{ 'status-critical': calcularMesesDesdeUltimaManutencao(c.ultimaManutencao) > 4 }">
+              {{ calcularMesesDesdeUltimaManutencao(c.ultimaManutencao) > 4 ? 'Crítico' : 'Em dia' }}
+            </span>
+          </td>
+          <td>
+            <button class="action-btn" (click)="abrirModal(c)">🔧</button> <!-- Botão de editar -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="computadoresFiltrados.length === 0" class="empty-state">
+    <div class="empty-state-icon">✅</div>
+    <h3>Nenhuma manutenção crítica encontrada</h3>
+    <p>Todos os equipamentos estão com manutenções em dia ou com atraso inferior ao filtro.</p>
+  </div>
+</div>
+
+<!-- Modal de Edição de Manutenção -->
+<div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': modalAberto}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Manutenção</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="fecharModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (submit)="salvarManutencao()">
+          <div class="mb-3">
+            <label for="ultimaManutencao" class="form-label">Última Manutenção</label>
+            <input type="date" class="form-control" [(ngModel)]="manutencaoEditando.ultimaManutencao" name="ultimaManutencao" required>
+          </div>
+          <div class="mb-3">
+            <label for="proximaManutencao" class="form-label">Próxima Manutenção</label>
+            <input type="date" class="form-control" [(ngModel)]="manutencaoEditando.proximaManutencao" name="proximaManutencao" required>
+          </div>
+          <button type="submit" class="btn btn-success">Salvar</button>
+          <button type="button" class="btn btn-secondary" (click)="fecharModal()">Cancelar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
