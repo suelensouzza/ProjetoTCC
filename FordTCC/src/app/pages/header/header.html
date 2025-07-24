@@ -12,10 +12,10 @@
   </button>
 
   <nav class="nav-links" [ngClass]="{ 'show': isMenuOpen }">
-    <a href="/home">📊 Dashboard</a>
-    <a href="/computadores">➕ Gerenciamento</a>
-    <a href="/manutencao">🛠️ Manutenção</a>
-    <a href="/manual">📖 Manual</a>
-    <a href="/login">🚪 Sair</a>
+    <a  [routerLink]="['/home']">📊 Dashboard</a>
+    <a [routerLink]="['/computadores']">➕ Gerenciamento</a>
+    <a [routerLink]="['/manutencao']">🛠️ Manutenção</a>
+    <a [routerLink]="['/manual']">📖 Manual</a>
+    <a [routerLink]="['/login']">🚪 Sair</a>
   </nav>
 </header>

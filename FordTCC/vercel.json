@@ -5,7 +5,8 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist/ford-tcc/browser"
+        "distDir": "dist/ford-tcc/browser",
+        "buildCommand": "npm run build -- --prerender=false"
       }
     }
   ],
