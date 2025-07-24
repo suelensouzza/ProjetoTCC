@@ -3,12 +3,13 @@ import { ComputadorService } from '../../services/computador.service';
 import { Computador } from '../../models/computador';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Header } from "../header/header";
 
 @Component({
   selector: 'app-manutencao',
   templateUrl: './manutencao.component.html',
   styleUrls: ['./manutencao.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, Header]
 })
 export class ManutencaoComponent implements OnInit {
   computadores: Computador[] = [];

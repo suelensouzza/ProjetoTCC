@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ComputadorService } from '../../services/computador.service';
 import { Computador, COMPUTADORES_add } from '../../models/computador';
+import { Header } from "../header/header";
 
 
 @Component({
@@ -11,7 +12,7 @@ import { Computador, COMPUTADORES_add } from '../../models/computador';
   templateUrl: './computador.component.html',
   styleUrls: ['./computador.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, Header]
 })
 export class ComputadoresComponent implements OnInit {
 userName: any;
@@ -76,14 +77,29 @@ userName: any;
     return this.computers.filter((c: Computador) => c.status === 'CRITICO').length;
   }
 
-  get maintenance(): number {
-    const today = new Date();
-    return this.computers.filter((c: Computador) => {
-      const [day, month, year] = c.proximaManutencao.split('/');
-      const nextDate = new Date(+year, +month - 1, +day);
-      return nextDate < today;
-    }).length;
-  }
+get maintenance(): number {
+  const today = new Date();
+  const fourMonthsAgo = new Date();
+  fourMonthsAgo.setMonth(today.getMonth() - 4);
+  
+  return this.computers.filter((c: Computador) => {
+    if (!c.ultimaManutencao || c.ultimaManutencao.trim() === '') {
+      return true;
+    }
+    let lastMaintenanceDate: Date;
+    if (c.ultimaManutencao.includes('/')) {
+      const [day, month, year] = c.ultimaManutencao.split('/');
+      lastMaintenanceDate = new Date(+year, +month - 1, +day);
+    } else if (c.ultimaManutencao.includes('-')) {
+      lastMaintenanceDate = new Date(c.ultimaManutencao);
+    } else {
+      return true; 
+    }
+    console.log(`${c.nome}: ${c.ultimaManutencao} -> ${lastMaintenanceDate} < ${fourMonthsAgo}?`, lastMaintenanceDate < fourMonthsAgo);
+    
+    return lastMaintenanceDate < fourMonthsAgo;
+  }).length;
+}
 
  computadorSelecionado: Computador | null = null;
 

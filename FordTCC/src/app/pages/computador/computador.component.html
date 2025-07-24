@@ -1,32 +1,10 @@
-<link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-/>
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-  rel="stylesheet"
-/>
-
-<header class="cabecalho bg-dark text-white py-3">
-  <div class="container d-flex justify-content-between align-items-center">
-    <div class="logo">
-      <h1 class="mb-0">ControlDesk</h1>
-      <small class="text-muted">Sistema de Monitoramento de Computadores</small>
-    </div>
-    <div class="usuario-info d-flex align-items-center">
-      <span class="nome-usuario me-2">Admin</span>
-      <div class="avatar-usuario rounded-circle bg-primary d-flex justify-content-center align-items-center" style="width:35px; height:35px; font-weight:bold;">
-        A
-      </div>
-    </div>
-  </div>
-</header>
+<app-header></app-header>
 
 <div class="computer-body container-fluid py-4">
   <div class="row mb-4">
     <div class="col-12 d-flex justify-content-between align-items-center">
       <div>
-        <h2 class="mb-1">💻 Gerenciar Computadores</h2>
+        <h2 class="mb-1">Gerenciar Computadores</h2>
         <p class="text-muted mb-0">Gerencie todos os computadores do sistema</p>
       </div>
       <div>
@@ -76,17 +54,19 @@
   </div>
 
   <div class="row mb-3">
-    <div class="col-md-4 mb-2">
-      <div class="input-group">
-        <span class="input-group-text"><i class="fas fa-search"></i></span>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Buscar computador..."
-          [(ngModel)]="searchTerm"
-        />
-      </div>
+     <div class="col-md-4 mb-2">
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="fas fa-search"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar computador..."
+        [(ngModel)]="searchTerm"
+      />
     </div>
+  </div>  
     <div class="col-md-3 mb-2">
       <select class="form-select" [(ngModel)]="selectedStatus">
         <option value="">Todos os Status</option>
@@ -107,76 +87,76 @@
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover mb-0">
-          <thead class="table-dark">
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Localização</th>
-              <th>Status</th>
-              <th>Modelo</th>
-              <th>Memória Permanente</th>
-              <th>Memória Volátil</th>
-              <th>Última Manutenção</th>
-              <th>Próxima Manutenção</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let c of filteredComputers">
-              <td><span class="badge bg-secondary">{{ encurtarId(c.id) }}</span></td>
-              <td>{{ c.nome }}</td>
-              <td>{{ c.localizacao }}</td>
-              <td>
-                <span class="badge"
-                  [ngClass]="{
-                    'badge-excelente': c.status === 'EXCELENTE',
-                    'badge-bom': c.status === 'BOM',
-                    'badge-regular': c.status === 'REGULAR',
-                    'badge-critico': c.status === 'CRITICO'
+  <div class="table-container">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th style="width: 80px;">ID</th>
+            <th>Nome</th>
+            <th>Localização</th>
+            <th style="width: 120px;">Status</th>
+            <th>Modelo</th>
+            <th>Mem. Permanente</th>
+            <th>Mem. Volátil</th>
+            <th>Últ. Manutenção</th>
+            <th>Próx. Manutenção</th>
+            <th style="width: 150px;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of filteredComputers">
+            <td><span class="id-badge">{{ encurtarId(c.id) }}</span></td>
+            <td>{{ c.nome }}</td>
+            <td>{{ c.localizacao }}</td>
+            <td>
+              <span class="status-badge"
+                [ngClass]="{
+                  'status-excelente': c.status === 'EXCELENTE',
+                  'status-bom': c.status === 'BOM',
+                  'status-regular': c.status === 'REGULAR',
+                  'status-critico': c.status === 'CRITICO'
+                }"
+              >
+                <span class="status-indicator"
+                  [ngStyle]="{
+                    'background-color': 
+                      c.status === 'EXCELENTE' ? '#16a34a' :
+                      c.status === 'BOM' ? '#0891b2' :
+                      c.status === 'REGULAR' ? '#d97706' :
+                      c.status === 'CRITICO' ? '#dc2626' : '#6c757d'
                   }"
-                >
-                  <span class="status-indicator"
-                    [ngStyle]="{
-                      'background-color': 
-                        c.status === 'EXCELENTE' ? '#28a745' :
-                        c.status === 'BOM' ? '#17a2b8' :
-                        c.status === 'REGULAR' ? '#ffc107' :
-                        c.status === 'CRITICO' ? '#dc3545' : '#6c757d'
-                    }"
-                    style="display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px;"
-                  ></span>
-                  {{ c.status }}
-                </span>
-              </td>
-              <td>{{ c.modelo }}</td>
-              <td>{{ c.memoriaPermanente }}</td>
-              <td>{{ c.memoriaVolatil }}</td>
-              <td>{{ c.ultimaManutencao }}</td>
-              <td>{{ c.proximaManutencao }}</td>
-              <td>
-                <div class="btn-group" role="group" aria-label="Ações computador">
-                  <button class="btn btn-info btn-sm" (click)="visualizarComputador(c.id)" title="Visualizar">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button class="btn btn-warning btn-sm" (click)="editarComputador(c)" title="Editar">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="btn btn-danger btn-sm" (click)="excluirComputador(c.id)" title="Excluir">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="filteredComputers.length === 0">
-              <td colspan="10" class="text-center text-muted">Nenhum computador encontrado.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                ></span>
+                {{ c.status }}
+              </span>
+            </td>
+            <td>{{ c.modelo }}</td>
+            <td>{{ c.memoriaPermanente }}</td>
+            <td>{{ c.memoriaVolatil }}</td>
+            <td>{{ c.ultimaManutencao }}</td>
+            <td>{{ c.proximaManutencao }}</td>
+            <td class="actions-cell">
+              <div class="action-buttons">
+                <button class="btn btn-action btn-view" (click)="visualizarComputador(c.id)" title="Ver detalhes">
+                  <i class="fas fa-eye"></i>
+                  <span class="action-text">Ver</span>
+                </button>
+                <button class="btn btn-action btn-edit" (click)="editarComputador(c)" title="Editar computador">
+                  <i class="fas fa-edit"></i>
+                  <span class="action-text">Editar</span>
+                </button>
+                <button class="btn btn-action btn-delete" (click)="excluirComputador(c.id)" title="Excluir computador">
+                  <i class="fas fa-trash"></i>
+                  <span class="action-text">Excluir</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filteredComputers.length === 0">
+            <td colspan="10" class="text-center text-muted">Nenhum computador encontrado.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -212,7 +192,6 @@
     </div>
   </div>
 </div>
-
 
   <!-- Modal -->
   <div class="modal d-block" *ngIf="modalAberto" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">

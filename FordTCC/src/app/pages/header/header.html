@@ -1,0 +1,21 @@
+<header class="navbar">
+  <div class="logo-area">
+    <div class="logo-icon">💻</div>
+    <div class="header-title">
+      <h1>ControlDesk</h1>
+      <p>Sistema de Monitoramento de Computadores</p>
+    </div>
+  </div>
+
+  <button class="hamburger" aria-label="Menu" (click)="toggleMenu()">
+    ☰
+  </button>
+
+  <nav class="nav-links" [ngClass]="{ 'show': isMenuOpen }">
+    <a href="/home">📊 Dashboard</a>
+    <a href="/computadores">➕ Gerenciamento</a>
+    <a href="/manutencao">🛠️ Manutenção</a>
+    <a href="/manual">📖 Manual</a>
+    <a href="/login">🚪 Sair</a>
+  </nav>
+</header>

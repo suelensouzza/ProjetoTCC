@@ -12,25 +12,58 @@ export interface Computador {
 
 export const COMPUTADORES_add: Computador[] = [
   {
-    id: '1',
-    nome: 'PC da Sala 101',
-    localizacao: 'Sala 101',
-    modelo: 'Dell Optiplex 7070',
-    memoriaPermanente: '256GB SSD',
+    id: '3',
+    nome: 'ssaadm',
+    localizacao: 'Open Adm',
+    modelo: 'Dell Optiplex 5090',
+    memoriaPermanente: '512GB SSD',
     memoriaVolatil: '16GB RAM',
     status: 'EXCELENTE',
-    ultimaManutencao: '2024-05-01',
-    proximaManutencao: '2024-11-01'
+    ultimaManutencao: '2025-05-20',
+    proximaManutencao: '2025-09-20'
   },
   {
-    id: '2',
-    nome: 'PC do Laboratório A',
-    localizacao: 'Laboratório A',
-    modelo: 'HP EliteDesk 800',
-    memoriaPermanente: '512GB SSD',
+    id: '4',
+    nome: 'ssafiscal',
+    localizacao: 'Sala Fiscal',
+    modelo: 'HP ProDesk 400 G7',
+    memoriaPermanente: '1TB SSD',
     memoriaVolatil: '32GB RAM',
+    status: 'BOM',
+    ultimaManutencao: '2025-03-10',
+    proximaManutencao: '2025-07-10'
+  },
+  {
+    id: '5',
+    nome: 'ssajuridico',
+    localizacao: 'Sala de Reunião',
+    modelo: 'Lenovo ThinkCentre M75q',
+    memoriaPermanente: '256GB SSD',
+    memoriaVolatil: '8GB RAM',
     status: 'REGULAR',
-    ultimaManutencao: '2024-06-15',
-    proximaManutencao: '2024-12-15'
+    ultimaManutencao: '2025-02-05',
+    proximaManutencao: '2025-06-05'
+  },
+  {
+    id: '6',
+    nome: 'ssati',
+    localizacao: 'Sala Tecnologia',
+    modelo: 'Acer Aspire TC-895',
+    memoriaPermanente: '512GB SSD',
+    memoriaVolatil: '16GB RAM',
+    status: 'EXCELENTE',
+    ultimaManutencao: '2025-07-15',
+    proximaManutencao: '2025-11-15'
+  },
+  {
+    id: '7',
+    nome: 'ssalogistica',
+    localizacao: 'Sala 202',
+    modelo: 'Asus ExpertCenter D5',
+    memoriaPermanente: '1TB HDD',
+    memoriaVolatil: '8GB RAM',
+    status: 'CRITICO',
+    ultimaManutencao: '2025-05-30',
+    proximaManutencao: '2025-09-30'
   }
 ];
