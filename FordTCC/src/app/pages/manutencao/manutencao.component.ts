@@ -27,7 +27,7 @@ export class ManutencaoComponent implements OnInit, OnDestroy {
   termoBusca: string = '';
   atrasoMedio: number = 0;
 
-  modalAberto: boolean = false;  
+  modalAberto: boolean = false;
 
   manutencaoEditando: Computador = {
     id: '',
@@ -41,7 +41,7 @@ export class ManutencaoComponent implements OnInit, OnDestroy {
     proximaManutencao: ''
   };
 
-  constructor(private computadorService: ComputadorService) {}
+  constructor(private computadorService: ComputadorService) { }
 
   ngOnInit(): void {
     this.carregarComputadores();
@@ -84,8 +84,8 @@ export class ManutencaoComponent implements OnInit, OnDestroy {
 
     this.atrasoMedio = this.computadoresCriticos.length > 0
       ? Math.round(this.computadoresCriticos.reduce((acc, c) =>
-          acc + this.calcularMesesDesdeUltimaManutencao(c.ultimaManutencao), 0
-        ) / this.computadoresCriticos.length)
+        acc + this.calcularMesesDesdeUltimaManutencao(c.ultimaManutencao), 0
+      ) / this.computadoresCriticos.length)
       : 0;
   }
 
@@ -96,6 +96,10 @@ export class ManutencaoComponent implements OnInit, OnDestroy {
     const anos = hoje.getFullYear() - ultima.getFullYear();
     const meses = hoje.getMonth() - ultima.getMonth();
     return anos * 12 + meses;
+  }
+
+  public encurtarId(id: string): string {
+    return id.substring(0, 4);
   }
 
   abrirModal(manutencao: Computador): void {

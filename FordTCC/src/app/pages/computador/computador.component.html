@@ -54,19 +54,13 @@
   </div>
 
   <div class="row mb-3">
-     <div class="col-md-4 mb-2">
-    <div class="input-group">
-      <span class="input-group-text">
-        <i class="fas fa-search"></i>
-      </span>
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Buscar computador..."
-        [(ngModel)]="searchTerm"
-      />
+    <div class="col-md-4 mb-2">
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="form-control search-input" placeholder="Buscar computador..."
+          [(ngModel)]="searchTerm" />
+      </div>
     </div>
-  </div>  
     <div class="col-md-3 mb-2">
       <select class="form-select" [(ngModel)]="selectedStatus">
         <option value="">Todos os Status</option>
@@ -110,23 +104,19 @@
             <td>{{ c.nome }}</td>
             <td>{{ c.localizacao }}</td>
             <td>
-              <span class="status-badge"
-                [ngClass]="{
+              <span class="status-badge" [ngClass]="{
                   'status-excelente': c.status === 'EXCELENTE',
                   'status-bom': c.status === 'BOM',
                   'status-regular': c.status === 'REGULAR',
                   'status-critico': c.status === 'CRITICO'
-                }"
-              >
-                <span class="status-indicator"
-                  [ngStyle]="{
+                }">
+                <span class="status-indicator" [ngStyle]="{
                     'background-color': 
                       c.status === 'EXCELENTE' ? '#16a34a' :
                       c.status === 'BOM' ? '#0891b2' :
                       c.status === 'REGULAR' ? '#d97706' :
                       c.status === 'CRITICO' ? '#dc2626' : '#6c757d'
-                  }"
-                ></span>
+                  }"></span>
                 {{ c.status }}
               </span>
             </td>
@@ -160,38 +150,32 @@
     </div>
   </div>
 
-<!-- Modal Detalhes Computador -->
-<div
-  class="modal"
-  tabindex="-1"
-  role="dialog"
-  [ngClass]="{'show d-block': computadorSelecionado !== null}"
-  [style.background]="'rgba(0,0,0,0.5)'"
-  [attr.aria-modal]="computadorSelecionado !== null ? 'true' : null"
-  [attr.aria-hidden]="computadorSelecionado === null ? 'true' : null"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Detalhes do Computador</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="fecharDetalhes()"></button>
-      </div>
-      <div class="modal-body" *ngIf="computadorSelecionado">
-        <p><strong>Nome:</strong> {{ computadorSelecionado.nome }}</p>
-        <p><strong>Localização:</strong> {{ computadorSelecionado.localizacao }}</p>
-        <p><strong>Modelo:</strong> {{ computadorSelecionado.modelo }}</p>
-        <p><strong>Status:</strong> {{ computadorSelecionado.status }}</p>
-        <p><strong>Memória Permanente:</strong> {{ computadorSelecionado.memoriaPermanente }}</p>
-        <p><strong>Memória Volátil:</strong> {{ computadorSelecionado.memoriaVolatil }}</p>
-        <p><strong>Última Manutenção:</strong> {{ computadorSelecionado.ultimaManutencao }}</p>
-        <p><strong>Próxima Manutenção:</strong> {{ computadorSelecionado.proximaManutencao }}</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="fecharDetalhes()">Fechar</button>
+  <!-- Modal Detalhes Computador -->
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show d-block': computadorSelecionado !== null}"
+    [style.background]="'rgba(0,0,0,0.5)'" [attr.aria-modal]="computadorSelecionado !== null ? 'true' : null"
+    [attr.aria-hidden]="computadorSelecionado === null ? 'true' : null">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detalhes do Computador</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="fecharDetalhes()"></button>
+        </div>
+        <div class="modal-body" *ngIf="computadorSelecionado">
+          <p><strong>Nome:</strong> {{ computadorSelecionado.nome }}</p>
+          <p><strong>Localização:</strong> {{ computadorSelecionado.localizacao }}</p>
+          <p><strong>Modelo:</strong> {{ computadorSelecionado.modelo }}</p>
+          <p><strong>Status:</strong> {{ computadorSelecionado.status }}</p>
+          <p><strong>Memória Permanente:</strong> {{ computadorSelecionado.memoriaPermanente }}</p>
+          <p><strong>Memória Volátil:</strong> {{ computadorSelecionado.memoriaVolatil }}</p>
+          <p><strong>Última Manutenção:</strong> {{ computadorSelecionado.ultimaManutencao }}</p>
+          <p><strong>Próxima Manutenção:</strong> {{ computadorSelecionado.proximaManutencao }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="fecharDetalhes()">Fechar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- Modal -->
   <div class="modal d-block" *ngIf="modalAberto" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">
@@ -209,7 +193,8 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Localização *</label>
-              <input type="text" class="form-control" [(ngModel)]="novoComputador.localizacao" name="localizacao" required />
+              <input type="text" class="form-control" [(ngModel)]="novoComputador.localizacao" name="localizacao"
+                required />
             </div>
             <div class="mb-3">
               <label class="form-label">Modelo *</label>
@@ -217,11 +202,13 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Memória Permanente *</label>
-              <input type="text" class="form-control" [(ngModel)]="novoComputador.memoriaPermanente" name="memoriaPermanente" required />
+              <input type="text" class="form-control" [(ngModel)]="novoComputador.memoriaPermanente"
+                name="memoriaPermanente" required />
             </div>
             <div class="mb-3">
               <label class="form-label">Memória Volátil *</label>
-              <input type="text" class="form-control" [(ngModel)]="novoComputador.memoriaVolatil" name="memoriaVolatil" required />
+              <input type="text" class="form-control" [(ngModel)]="novoComputador.memoriaVolatil" name="memoriaVolatil"
+                required />
             </div>
             <div class="mb-3">
               <label class="form-label">Status *</label>
@@ -234,11 +221,13 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Última Manutenção</label>
-              <input type="date" class="form-control" [(ngModel)]="novoComputador.ultimaManutencao" name="ultimaManutencao" />
+              <input type="date" class="form-control" [(ngModel)]="novoComputador.ultimaManutencao"
+                name="ultimaManutencao" />
             </div>
             <div class="mb-3">
               <label class="form-label">Próxima Manutenção</label>
-              <input type="date" class="form-control" [(ngModel)]="novoComputador.proximaManutencao" name="proximaManutencao" />
+              <input type="date" class="form-control" [(ngModel)]="novoComputador.proximaManutencao"
+                name="proximaManutencao" />
             </div>
             <div class="d-flex justify-content-end gap-2">
               <button type="button" class="btn btn-secondary" (click)="fecharModal()">Cancelar</button>

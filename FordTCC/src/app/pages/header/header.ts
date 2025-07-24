@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./header.css'],
   imports: [
     CommonModule,
-    FormsModule  
+    FormsModule
   ]
 
 })

@@ -76,8 +76,15 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
 }
 
 .stats-container {
@@ -178,7 +185,8 @@ body {
     letter-spacing: 0.05em;
 }
 
-.filter-input, .filter-select {
+.filter-input,
+.filter-select {
     padding: 0.8rem 1rem;
     background: white;
     border: 2px solid #e5e7eb;
@@ -191,7 +199,8 @@ body {
     font-weight: 400;
 }
 
-.filter-input:focus, .filter-select:focus {
+.filter-input:focus,
+.filter-select:focus {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -230,7 +239,8 @@ body {
     color: white;
 }
 
-.table th, .table td {
+.table th,
+.table td {
     padding: 1.2rem;
     text-align: left;
     border-bottom: 1px solid rgba(59, 130, 246, 0.1);
@@ -441,47 +451,50 @@ body {
     .main-container {
         padding: 0 1rem;
     }
-    
+
     .filters {
         flex-direction: column;
         align-items: stretch;
     }
-    
+
     .filter-group {
         width: 100%;
     }
-    
-    .filter-input, .filter-select {
+
+    .filter-input,
+    .filter-select {
         min-width: 100%;
     }
-    
+
     .table-container {
         overflow-x: auto;
     }
-    
+
     .stats-container {
         grid-template-columns: 1fr;
     }
-    
+
     .page-header {
         flex-direction: column;
         text-align: center;
     }
 }
 
-/* Animações suaves */
 @keyframes fadeInUp {
     from {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-.stat-card, .table-container, .filters {
+.stat-card,
+.table-container,
+.filters {
     animation: fadeInUp 0.6s ease forwards;
 }
 
@@ -489,7 +502,6 @@ body {
     animation-delay: 0.1s;
 }
 
-/* Efeitos de tecnologia */
 .page-header::before {
     content: '';
     position: absolute;

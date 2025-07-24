@@ -5,7 +5,8 @@
   padding: 0;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
@@ -73,8 +74,13 @@ html, body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-spinner p {
@@ -258,13 +264,18 @@ html, body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   animation: shimmer 2s infinite;
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* ==============================
@@ -361,12 +372,21 @@ html, body {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* Status labels */
-.etiqueta-status-excelente, .etiqueta-status-bom, .etiqueta-status-critico {
+.etiqueta-status-excelente,
+.etiqueta-status-bom,
+.etiqueta-status-critico {
   padding: 0.5rem 1rem;
   border-radius: 50px;
   font-size: 0.75rem;
@@ -402,8 +422,16 @@ html, body {
 }
 
 @keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0.5; }
+
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0.5;
+  }
 }
 
 .botoes-acoes {
@@ -471,11 +499,11 @@ html, body {
   .hero-stats {
     gap: 2rem;
   }
-  
+
   .conteudo-principal {
     padding: 3rem 1.5rem;
   }
-  
+
   .grade-estatisticas {
     gap: 1.5rem;
   }
@@ -515,11 +543,11 @@ html, body {
   .numero-estatistica {
     font-size: 2.5rem;
   }
-  
+
   .titulo-secao {
     padding: 1.5rem 2rem;
   }
-  
+
   .tabela th,
   .tabela td {
     padding: 1rem;
@@ -545,15 +573,15 @@ html, body {
   .hero-title {
     font-size: 2rem;
   }
-  
+
   .hero-stats {
     gap: 1rem;
   }
-  
+
   .cartao {
     padding: 1.5rem;
   }
-  
+
   .numero-estatistica {
     font-size: 2rem;
   }

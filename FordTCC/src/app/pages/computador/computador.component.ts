@@ -22,7 +22,7 @@ export class ComputadoresComponent implements OnInit, OnDestroy {
   constructor(
     private computadorService: ComputadorService,
     private router: Router
-  ) {}
+  ) { }
 
   voltarHome(): void {
     this.router.navigate(['/home']);
@@ -75,7 +75,7 @@ export class ComputadoresComponent implements OnInit, OnDestroy {
   }
 
   public encurtarId(id: string): string {
-    return id.substring(0, 8);
+    return id.substring(0, 4);
   }
 
   get filteredComputers(): Computador[] {
@@ -103,7 +103,7 @@ export class ComputadoresComponent implements OnInit, OnDestroy {
     const today = new Date();
     const fourMonthsAgo = new Date();
     fourMonthsAgo.setMonth(today.getMonth() - 4);
-    
+
     return this.computers.filter((c: Computador) => {
       if (!c.ultimaManutencao || c.ultimaManutencao.trim() === '') {
         return true;
@@ -115,9 +115,9 @@ export class ComputadoresComponent implements OnInit, OnDestroy {
       } else if (c.ultimaManutencao.includes('-')) {
         lastMaintenanceDate = new Date(c.ultimaManutencao);
       } else {
-        return true; 
+        return true;
       }
-      
+
       return lastMaintenanceDate < fourMonthsAgo;
     }).length;
   }
