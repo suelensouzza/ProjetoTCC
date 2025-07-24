@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+// computador.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ComputadorService } from '../../services/computador.service';
-import { Computador, COMPUTADORES_add } from '../../models/computador';
+import { Computador } from '../../models/computador';
 import { Header } from "../header/header";
-
 
 @Component({
   selector: 'app-computador',
@@ -14,8 +15,10 @@ import { Header } from "../header/header";
   standalone: true,
   imports: [CommonModule, FormsModule, Header]
 })
-export class ComputadoresComponent implements OnInit {
-userName: any;
+export class ComputadoresComponent implements OnInit, OnDestroy {
+  userName: any;
+  private subscription = new Subscription();
+
   constructor(
     private computadorService: ComputadorService,
     private router: Router
@@ -26,6 +29,7 @@ userName: any;
   }
 
   computers: Computador[] = [];
+  loading = true;
 
   searchTerm = '';
   selectedStatus = '';
@@ -48,12 +52,30 @@ userName: any;
   };
 
   ngOnInit(): void {
-    this.computers = this.computadorService.getComputadores();
-    console.log('Computadores carregados:', this.computers);
+    this.carregarComputadores();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  private carregarComputadores(): void {
+    const sub = this.computadorService.getComputadores().subscribe({
+      next: (computadores) => {
+        this.computers = computadores;
+        this.loading = false;
+        console.log('Computadores carregados:', computadores);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar computadores:', error);
+        this.loading = false;
+      }
+    });
+    this.subscription.add(sub);
   }
 
   public encurtarId(id: string): string {
-    return id.substring(0, 5);
+    return id.substring(0, 8);
   }
 
   get filteredComputers(): Computador[] {
@@ -77,46 +99,43 @@ userName: any;
     return this.computers.filter((c: Computador) => c.status === 'CRITICO').length;
   }
 
-get maintenance(): number {
-  const today = new Date();
-  const fourMonthsAgo = new Date();
-  fourMonthsAgo.setMonth(today.getMonth() - 4);
-  
-  return this.computers.filter((c: Computador) => {
-    if (!c.ultimaManutencao || c.ultimaManutencao.trim() === '') {
-      return true;
-    }
-    let lastMaintenanceDate: Date;
-    if (c.ultimaManutencao.includes('/')) {
-      const [day, month, year] = c.ultimaManutencao.split('/');
-      lastMaintenanceDate = new Date(+year, +month - 1, +day);
-    } else if (c.ultimaManutencao.includes('-')) {
-      lastMaintenanceDate = new Date(c.ultimaManutencao);
-    } else {
-      return true; 
-    }
-    console.log(`${c.nome}: ${c.ultimaManutencao} -> ${lastMaintenanceDate} < ${fourMonthsAgo}?`, lastMaintenanceDate < fourMonthsAgo);
+  get maintenance(): number {
+    const today = new Date();
+    const fourMonthsAgo = new Date();
+    fourMonthsAgo.setMonth(today.getMonth() - 4);
     
-    return lastMaintenanceDate < fourMonthsAgo;
-  }).length;
-}
-
- computadorSelecionado: Computador | null = null;
-
-visualizarComputador(id: string): void {
-  const computador = this.computers.find(c => c.id === id);
-  if (computador) {
-    this.computadorSelecionado = computador;
-  } else {
-    console.log('Computador não encontrado');
+    return this.computers.filter((c: Computador) => {
+      if (!c.ultimaManutencao || c.ultimaManutencao.trim() === '') {
+        return true;
+      }
+      let lastMaintenanceDate: Date;
+      if (c.ultimaManutencao.includes('/')) {
+        const [day, month, year] = c.ultimaManutencao.split('/');
+        lastMaintenanceDate = new Date(+year, +month - 1, +day);
+      } else if (c.ultimaManutencao.includes('-')) {
+        lastMaintenanceDate = new Date(c.ultimaManutencao);
+      } else {
+        return true; 
+      }
+      
+      return lastMaintenanceDate < fourMonthsAgo;
+    }).length;
   }
-}
 
-fecharDetalhes(): void {
-  this.computadorSelecionado = null;
-}
+  computadorSelecionado: Computador | null = null;
 
+  visualizarComputador(id: string): void {
+    const computador = this.computers.find(c => c.id === id);
+    if (computador) {
+      this.computadorSelecionado = computador;
+    } else {
+      console.log('Computador não encontrado');
+    }
+  }
 
+  fecharDetalhes(): void {
+    this.computadorSelecionado = null;
+  }
 
   editarComputador(computador: Computador): void {
     this.modalAberto = true;
@@ -125,9 +144,16 @@ fecharDetalhes(): void {
     this.computadorEditandoId = computador.id;
   }
 
-  excluirComputador(id: string): void {
-    this.computadorService.excluirComputador(id);
-    this.computers = this.computadorService.getComputadores();
+  async excluirComputador(id: string): Promise<void> {
+    if (confirm('Tem certeza que deseja excluir este computador?')) {
+      try {
+        await this.computadorService.excluirComputador(id);
+        console.log('Computador excluído com sucesso');
+      } catch (error) {
+        console.error('Erro ao excluir computador:', error);
+        alert('Erro ao excluir computador. Tente novamente.');
+      }
+    }
   }
 
   abrirModal(): void {
@@ -151,7 +177,7 @@ fecharDetalhes(): void {
     this.modalAberto = false;
   }
 
-  salvarComputador(): void {
+  async salvarComputador(): Promise<void> {
     if (
       this.novoComputador.nome &&
       this.novoComputador.localizacao &&
@@ -160,13 +186,19 @@ fecharDetalhes(): void {
       this.novoComputador.memoriaVolatil &&
       this.novoComputador.status
     ) {
-      if (this.modoEdicao && this.computadorEditandoId) {
-        this.computadorService.editarComputador(this.computadorEditandoId, { ...this.novoComputador });
-      } else {
-        this.computadorService.adicionarComputador({ ...this.novoComputador });
+      try {
+        if (this.modoEdicao && this.computadorEditandoId) {
+          await this.computadorService.editarComputador(this.computadorEditandoId, { ...this.novoComputador });
+          console.log('Computador editado com sucesso');
+        } else {
+          await this.computadorService.adicionarComputador({ ...this.novoComputador });
+          console.log('Computador adicionado com sucesso');
+        }
+        this.fecharModal();
+      } catch (error) {
+        console.error('Erro ao salvar computador:', error);
+        alert('Erro ao salvar computador. Tente novamente.');
       }
-      this.computers = this.computadorService.getComputadores();
-      this.fecharModal();
     } else {
       alert('Preencha todos os campos obrigatórios.');
     }

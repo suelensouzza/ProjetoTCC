@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Computador, COMPUTADORES_add } from '../../models/computador';  
+// home.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Computador } from '../../models/computador';  
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Header } from "../header/header"; 
+import { Header } from "../header/header";
+import { ComputadorService } from '../../services/computador.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -11,12 +14,39 @@ import { Header } from "../header/header";
   styleUrls: ['./home.component.css'],
   imports: [CommonModule, FormsModule, Header]
 })
-export class HomeComponent implements OnInit {
-
+export class HomeComponent implements OnInit, OnDestroy {
   userName = 'Admin';
-  computers: Computador[] = COMPUTADORES_add;
+  computers: Computador[] = [];
+  loading = true;
+  private subscription = new Subscription();
 
-  constructor(private router: Router) {} 
+  constructor(
+    private router: Router,
+    private computadorService: ComputadorService
+  ) {}
+
+  ngOnInit(): void {
+    this.carregarComputadores();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  private carregarComputadores(): void {
+    const sub = this.computadorService.getComputadores().subscribe({
+      next: (computadores) => {
+        this.computers = computadores;
+        this.loading = false;
+        console.log('Computadores carregados no home:', computadores);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar computadores no home:', error);
+        this.loading = false;
+      }
+    });
+    this.subscription.add(sub);
+  }
 
   get totalComputers(): number {
     return this.computers.length;
@@ -35,12 +65,11 @@ export class HomeComponent implements OnInit {
     return this.computers.filter(c => c.status === 'CRITICO').length;
   }
 
-  // Nova função baseada na lógica do componente de computadores
   get maintenanceCount(): number {
     const today = new Date();
     const fourMonthsAgo = new Date();
     fourMonthsAgo.setMonth(today.getMonth() - 4);
-    
+   
     return this.computers.filter((c: Computador) => {
       if (!c.ultimaManutencao || c.ultimaManutencao.trim() === '') {
         return true;
@@ -52,9 +81,9 @@ export class HomeComponent implements OnInit {
       } else if (c.ultimaManutencao.includes('-')) {
         lastMaintenanceDate = new Date(c.ultimaManutencao);
       } else {
-        return true; 
+        return true;
       }
-      
+     
       return lastMaintenanceDate < fourMonthsAgo;
     }).length;
   }
@@ -78,19 +107,25 @@ export class HomeComponent implements OnInit {
   }
 
   isOverdue(dateStr: string): boolean {
+    if (!dateStr) return false;
     const today = new Date();
     const date = new Date(dateStr);
     return date < today;
   }
 
-  excluirComputador(id: string): void {
-    this.computers = this.computers.filter(c => c.id !== id);
-  }
-
-  ngOnInit(): void {
+  async excluirComputador(id: string): Promise<void> {
+    if (confirm('Tem certeza que deseja excluir este computador?')) {
+      try {
+        await this.computadorService.excluirComputador(id);
+        console.log('Computador excluído com sucesso');
+      } catch (error) {
+        console.error('Erro ao excluir computador:', error);
+        alert('Erro ao excluir computador. Tente novamente.');
+      }
+    }
   }
 
   logoff(): void {
-    this.router.navigate(['/login']); 
+    this.router.navigate(['/login']);
   }
 }

@@ -1,29 +1,42 @@
-import { Injectable } from '@angular/core';
-import { Computador, COMPUTADORES_add } from '../models/computador';
+// computador.service.ts
+import { Injectable, inject } from '@angular/core';
+import { Firestore, collection, collectionData, addDoc, doc, updateDoc, deleteDoc, query, getDocs } from '@angular/fire/firestore';
+import { Observable, from, map } from 'rxjs';
+import { Computador } from '../models/computador';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComputadorService {
-  private computadores: Computador[] = [...COMPUTADORES_add]; 
+  private firestore = inject(Firestore);
 
-  getComputadores(): Computador[] {
-    return this.computadores;
+  getComputadores(): Observable<Computador[]> {
+    const computadoresRef = collection(this.firestore, 'computadores');
+    
+    return from(getDocs(computadoresRef)).pipe(
+      map(snapshot => {
+        return snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as Computador));
+      })
+    );
   }
 
-  adicionarComputador(novo: Computador): void {
-    novo.id = crypto.randomUUID();
-    this.computadores.push(novo);
+  async adicionarComputador(computador: Computador): Promise<void> {
+    const computadoresRef = collection(this.firestore, 'computadores');
+    const { id, ...computadorSemId } = computador;
+    await addDoc(computadoresRef, computadorSemId);
   }
 
-  excluirComputador(id: string): void {
-    this.computadores = this.computadores.filter(c => c.id !== id);
+  async editarComputador(id: string, computador: Computador): Promise<void> {
+    const computadorDoc = doc(this.firestore, 'computadores', id);
+    const { id: _, ...computadorSemId } = computador;
+    await updateDoc(computadorDoc, computadorSemId);
   }
 
-  editarComputador(id: string, atualizado: Computador): void {
-    const index = this.computadores.findIndex(c => c.id === id);
-    if (index !== -1) {
-      this.computadores[index] = { ...atualizado, id };
-    }
+  async excluirComputador(id: string): Promise<void> {
+    const computadorDoc = doc(this.firestore, 'computadores', id);
+    await deleteDoc(computadorDoc);
   }
 }

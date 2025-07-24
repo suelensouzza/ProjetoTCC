@@ -10,7 +10,7 @@ export interface Computador {
   proximaManutencao: string;
 }
 
-export const COMPUTADORES_add: Computador[] = [
+/*export const COMPUTADORES_add: Computador[] = [
   {
     id: '3',
     nome: 'ssaadm',
@@ -67,3 +67,10 @@ export const COMPUTADORES_add: Computador[] = [
     proximaManutencao: '2025-09-30'
   }
 ];
+
+interface FirestoreTimestamp {
+  seconds: number;
+  nanoseconds: number;
+}*/
+
+

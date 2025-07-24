@@ -1,33 +1,42 @@
+<!-- home.component.html -->
 <!-- Header -->
 <app-header></app-header>
 
-<!-- Seção Hero -->
-<div class="hero-section">
-  <div class="hero-content">
-    <h1 class="hero-title">Dashboard de Controle</h1>
-    <p class="hero-subtitle">Monitore e gerencie todos os computadores da sua organização em tempo real</p>
-    
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <span class="hero-stat-number">{{ totalComputers }}</span>
-        <span class="hero-stat-label">Total de Equipamentos</span>
-      </div>
-      <div class="hero-stat">
-        <span class="hero-stat-number">{{ excellentCount }}</span>
-        <span class="hero-stat-label">Estado Excelente</span>
-      </div>
-      <div class="hero-stat">
-        <span class="hero-stat-number">{{ criticalCount }}</span>
-        <span class="hero-stat-label">Requerem Atenção</span>
-      </div>
-    </div>
+<!-- Loading Indicator -->
+<div *ngIf="loading" class="loading-container">
+  <div class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Carregando dados...</p>
   </div>
 </div>
 
-<!-- Conteúdo Principal -->
-<main class="conteudo-principal">
+<!-- Content (hidden while loading) -->
+<div *ngIf="!loading">
+  <!-- Seção Hero -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Dashboard de Controle</h1>
+      <p class="hero-subtitle">Monitore e gerencie todos os computadores da sua organização em tempo real</p>
+           
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-number">{{ totalComputers }}</span>
+          <span class="hero-stat-label">Total de Equipamentos</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-number">{{ excellentCount }}</span>
+          <span class="hero-stat-label">Estado Excelente</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-number">{{ criticalCount }}</span>
+          <span class="hero-stat-label">Requerem Atenção</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-
+  <!-- Conteúdo Principal -->
+  <main class="conteudo-principal">
     <div class="grade-estatisticas">
       <div class="cartao total">
         <div class="numero-estatistica">{{ totalComputers }}</div>
@@ -92,9 +101,9 @@
                   {{ c.status.toUpperCase() }}
                 </span>
               </td>
-              <td>{{ c.ultimaManutencao }}</td>
+              <td>{{ c.ultimaManutencao || 'N/A' }}</td>
               <td [ngClass]="{ 'vencido': isOverdue(c.proximaManutencao) }">
-                {{ c.proximaManutencao }}
+                {{ c.proximaManutencao || 'N/A' }}
               </td>
               <td>
                 <div class="botoes-acoes">
@@ -104,9 +113,14 @@
                 </div>
               </td>
             </tr>
+            <tr *ngIf="computers.length === 0">
+              <td colspan="6" class="text-center text-muted">
+                Nenhum computador encontrado. <a href="/computadores">Adicione um computador</a>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
     </div>
-  
-</main>
+  </main>
+</div>

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+// manutencao.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ComputadorService } from '../../services/computador.service';
 import { Computador } from '../../models/computador';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Header } from "../header/header";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-manutencao',
@@ -11,11 +13,14 @@ import { Header } from "../header/header";
   styleUrls: ['./manutencao.component.css'],
   imports: [CommonModule, FormsModule, Header]
 })
-export class ManutencaoComponent implements OnInit {
+export class ManutencaoComponent implements OnInit, OnDestroy {
   computadores: Computador[] = [];
   computadoresFiltrados: Computador[] = [];
   computadoresCriticos: Computador[] = [];
   localizacoesUnicas: string[] = [];
+  loading = true;
+
+  private subscription = new Subscription();
 
   filtroLocalizacao: string = '';
   filtroAtrasoMinimo: number = 4;
@@ -42,10 +47,24 @@ export class ManutencaoComponent implements OnInit {
     this.carregarComputadores();
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
   carregarComputadores(): void {
-    this.computadores = this.computadorService.getComputadores();
-    this.localizacoesUnicas = [...new Set(this.computadores.map(c => c.localizacao))];
-    this.filtrar();
+    const sub = this.computadorService.getComputadores().subscribe({
+      next: (computadores) => {
+        this.computadores = computadores;
+        this.localizacoesUnicas = [...new Set(this.computadores.map(c => c.localizacao))];
+        this.filtrar();
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar computadores:', error);
+        this.loading = false;
+      }
+    });
+    this.subscription.add(sub);
   }
 
   filtrar(): void {
@@ -71,6 +90,7 @@ export class ManutencaoComponent implements OnInit {
   }
 
   calcularMesesDesdeUltimaManutencao(data: string): number {
+    if (!data) return 0;
     const hoje = new Date();
     const ultima = new Date(data);
     const anos = hoje.getFullYear() - ultima.getFullYear();
@@ -78,18 +98,15 @@ export class ManutencaoComponent implements OnInit {
     return anos * 12 + meses;
   }
 
-  
+  abrirModal(manutencao: Computador): void {
+    this.manutencaoEditando = { ...manutencao };
+    this.modalAberto = true;
+  }
 
-abrirModal(manutencao: Computador): void {
-  this.manutencaoEditando = { ...manutencao };
-  this.modalAberto = true;
-}
-
-fecharModal(): void {
-  this.modalAberto = false;
-  this.resetarManutencaoEditando();
-}
-
+  fecharModal(): void {
+    this.modalAberto = false;
+    this.resetarManutencaoEditando();
+  }
 
   resetarManutencaoEditando(): void {
     this.manutencaoEditando = {
@@ -105,19 +122,31 @@ fecharModal(): void {
     };
   }
 
-  salvarManutencao(): void {
+  async salvarManutencao(): Promise<void> {
     if (this.manutencaoEditando.id) {
-      this.computadorService.editarComputador(
-        this.manutencaoEditando.id,
-        this.manutencaoEditando
-      );
-      this.fecharModal();  // Fecha o modal após salvar
-      this.carregarComputadores();  // Recarrega os computadores
+      try {
+        await this.computadorService.editarComputador(
+          this.manutencaoEditando.id,
+          this.manutencaoEditando
+        );
+        this.fecharModal();
+        console.log('Manutenção salva com sucesso');
+      } catch (error) {
+        console.error('Erro ao salvar manutenção:', error);
+        alert('Erro ao salvar manutenção. Tente novamente.');
+      }
     }
   }
 
-  excluirManutencao(id: string): void {
-    this.computadorService.excluirComputador(id);
-    this.carregarComputadores();  // Recarrega os computadores após exclusão
+  async excluirManutencao(id: string): Promise<void> {
+    if (confirm('Tem certeza que deseja excluir este computador?')) {
+      try {
+        await this.computadorService.excluirComputador(id);
+        console.log('Computador excluído com sucesso');
+      } catch (error) {
+        console.error('Erro ao excluir computador:', error);
+        alert('Erro ao excluir computador. Tente novamente.');
+      }
+    }
   }
 }
